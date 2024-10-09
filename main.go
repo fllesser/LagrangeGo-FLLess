@@ -16,7 +16,7 @@ var logger = utils.ProtocolLogger{}
 
 func init() {
 	config.Init()
-	utils.Init()
+	//utils.Init()
 	bot.Init(&logger)
 }
 

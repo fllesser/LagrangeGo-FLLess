@@ -2,6 +2,7 @@ package bot
 
 import (
 	"os"
+	"time"
 
 	"github.com/ExquisiteCore/LagrangeGo-Template/config"
 	"github.com/ExquisiteCore/LagrangeGo-Template/utils"
@@ -17,13 +18,14 @@ type Bot struct {
 }
 
 // Bot 实例
+
 var QQClient *Bot
 
 func Init(logger *utils.ProtocolLogger) {
 	appInfo := auth.AppList["linux"]["3.2.10-25765"]
 	deviceInfo := auth.NewDeviceInfo(114514)
 	qqClientInstance := client.NewClient(config.GlobalConfig.Bot.Account, appInfo, "https://sign.lagrangecore.org/api/sign/25765")
-	qqClientInstance.SetLogger(logger)
+	//qqClientInstance.SetLogger(logger)
 	qqClientInstance.UseDevice(deviceInfo)
 
 	data, err := os.ReadFile("sig.bin")
@@ -38,7 +40,7 @@ func Init(logger *utils.ProtocolLogger) {
 		}
 	}
 	QQClient = &Bot{QQClient: qqClientInstance}
-
+	CheckAlive()
 }
 
 // Login 登录
@@ -53,6 +55,7 @@ func Login() error {
 }
 
 // 保存sign
+
 func Dumpsig() {
 	data, err := QQClient.Sig().Marshal()
 	if err != nil {
@@ -65,4 +68,22 @@ func Dumpsig() {
 		return
 	}
 	logrus.Infoln("sig saved into sig.bin")
+}
+
+func CheckAlive() {
+	ticker := time.NewTicker(10 * time.Second)
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				logrus.Errorf("定时器发生错误，%v", r)
+			}
+			ticker.Stop() // 意外退出时关闭定时器
+		}()
+		for _ = range ticker.C {
+			if !QQClient.Online.Load() {
+				logrus.Errorln("[bot] offline")
+				break
+			}
+		}
+	}()
 }

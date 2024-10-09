@@ -11,12 +11,14 @@ import (
 // RegisterCustomLogic 注册所有自定义逻辑
 func RegisterCustomLogic() {
 	//注册私聊消息处理逻辑
+
 	Manager.RegisterPrivateMessageHandler(func(client *client.QQClient, event *message.PrivateMessage) {
 		//client.SendPrivateMessage(event.Sender.Uin, []message.IMessageElement{message.NewText("Hello World!")})
-		logrus.Infof("[bot] message.private[uid:%v,msg:%v]", event.Sender.Uin, event.ToString())
+		logrus.Infof("message.private[uid:%v,msg:%v]", event.Sender.Uin, event.ToString())
 	})
+
 	Manager.RegisterGroupMessageHandler(func(client *client.QQClient, event *message.GroupMessage) {
-		logrus.Infof("[bot] message.group[gid:%v,uid:%v,msg:%v]", event.GroupUin, event.Sender.Uin, event.ToString())
+		logrus.Infof("message.group[gid:%v,uid:%v,msg:%v]", event.GroupUin, event.Sender.Uin, event.ToString())
 	})
 
 	Manager.RegisterGroupMessageHandler(func(client *client.QQClient, event *message.GroupMessage) {
