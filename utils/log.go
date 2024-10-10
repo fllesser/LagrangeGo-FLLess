@@ -18,7 +18,7 @@ type ProtocolLogger struct{}
 
 var dumpsPath = "dump"
 
-const fromProtocol = "Lgr -> "
+const fromProtocol = "Lgr <- "
 
 func (p ProtocolLogger) Info(format string, arg ...any) {
 	logger.Infof(fromProtocol+format, arg...)

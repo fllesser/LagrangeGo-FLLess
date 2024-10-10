@@ -79,7 +79,7 @@ func CheckAlive() {
 		statusContent := map[bool]string{true: "online", false: "offline"}
 		for range ticker.C {
 			if lastStatus != status {
-				logrus.Errorf("Lgr[%v] %v", QQClient.Uin, statusContent[status])
+				logrus.Infof("Lgr[%v] %v", QQClient.Uin, statusContent[status])
 			}
 			lastStatus, status = status, QQClient.Online.Load()
 		}
