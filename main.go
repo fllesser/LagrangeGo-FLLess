@@ -11,13 +11,10 @@ import (
 	"github.com/ExquisiteCore/LagrangeGo-Template/utils"
 )
 
-// 创建 protocolLogger 实例
-var logger = utils.ProtocolLogger{}
-
 func init() {
 	config.Init()
-	//utils.Init()
-	bot.Init(&logger)
+	utils.Init()
+	bot.Init()
 }
 
 func main() {
@@ -33,6 +30,7 @@ func main() {
 	defer bot.Dumpsig()
 
 	// setup the main stop channel
+
 	mc := make(chan os.Signal, 2)
 	signal.Notify(mc, os.Interrupt, syscall.SIGTERM)
 	for {

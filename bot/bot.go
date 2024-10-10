@@ -5,8 +5,6 @@ import (
 	"time"
 
 	"github.com/ExquisiteCore/LagrangeGo-Template/config"
-	"github.com/ExquisiteCore/LagrangeGo-Template/utils"
-
 	"github.com/LagrangeDev/LagrangeGo/client"
 	"github.com/LagrangeDev/LagrangeGo/client/auth"
 	"github.com/sirupsen/logrus"
@@ -21,11 +19,11 @@ type Bot struct {
 
 var QQClient *Bot
 
-func Init(logger *utils.ProtocolLogger) {
+func Init() {
 	appInfo := auth.AppList["linux"]["3.2.10-25765"]
 	deviceInfo := auth.NewDeviceInfo(114514)
 	qqClientInstance := client.NewClient(config.GlobalConfig.Bot.Account, appInfo, "https://sign.lagrangecore.org/api/sign/25765")
-	//qqClientInstance.SetLogger(logger)
+	//qqClientInstance.SetLogger(utils.Logger)
 	qqClientInstance.UseDevice(deviceInfo)
 
 	data, err := os.ReadFile("sig.bin")
@@ -44,14 +42,12 @@ func Init(logger *utils.ProtocolLogger) {
 }
 
 // Login 登录
-func Login() error {
+func Login() {
 	// 声明 err 变量并进行错误处理
 	err := QQClient.Login(config.GlobalConfig.Bot.Password, "qrcode.png")
 	if err != nil {
 		logrus.Errorln("login err:", err)
-		return err
 	}
-	return nil
 }
 
 // 保存sign
@@ -79,11 +75,13 @@ func CheckAlive() {
 			}
 			ticker.Stop() // 意外退出时关闭定时器
 		}()
-		for _ = range ticker.C {
-			if !QQClient.Online.Load() {
-				logrus.Errorln("[bot] offline")
-				break
+		status, lastStatus := true, false
+		statusContent := map[bool]string{true: "online", false: "offline"}
+		for range ticker.C {
+			if lastStatus != status {
+				logrus.Errorf("Lgr[%v] %v", QQClient.Uin, statusContent[status])
 			}
+			lastStatus, status = status, QQClient.Online.Load()
 		}
 	}()
 }

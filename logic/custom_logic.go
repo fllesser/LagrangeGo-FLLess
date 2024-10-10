@@ -1,10 +1,10 @@
 package logic
 
 import (
+	"github.com/ExquisiteCore/LagrangeGo-Template/utils"
 	"github.com/LagrangeDev/LagrangeGo/client"
 	"github.com/LagrangeDev/LagrangeGo/client/entity"
 	"github.com/LagrangeDev/LagrangeGo/message"
-	"github.com/sirupsen/logrus"
 	"strings"
 )
 
@@ -14,11 +14,11 @@ func RegisterCustomLogic() {
 
 	Manager.RegisterPrivateMessageHandler(func(client *client.QQClient, event *message.PrivateMessage) {
 		//client.SendPrivateMessage(event.Sender.Uin, []message.IMessageElement{message.NewText("Hello World!")})
-		logrus.Infof("message.private[uid:%v,msg:%v]", event.Sender.Uin, event.ToString())
+		utils.Logger.Info("message.private[uid:%v,msg:%v]", event.Sender.Uin, event.ToString())
 	})
 
 	Manager.RegisterGroupMessageHandler(func(client *client.QQClient, event *message.GroupMessage) {
-		logrus.Infof("message.group[gid:%v,uid:%v,msg:%v]", event.GroupUin, event.Sender.Uin, event.ToString())
+		utils.Logger.Info("message.group[gid:%v,uid:%v,msg:%v]", event.GroupUin, event.Sender.Uin, event.ToString())
 	})
 
 	Manager.RegisterGroupMessageHandler(func(client *client.QQClient, event *message.GroupMessage) {

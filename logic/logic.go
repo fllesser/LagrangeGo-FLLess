@@ -2,6 +2,7 @@ package logic
 
 import (
 	"github.com/ExquisiteCore/LagrangeGo-Template/bot"
+	"github.com/ExquisiteCore/LagrangeGo-Template/utils"
 	"github.com/LagrangeDev/LagrangeGo/client"
 	"github.com/LagrangeDev/LagrangeGo/client/event"
 	"github.com/LagrangeDev/LagrangeGo/message"
@@ -52,6 +53,20 @@ func SetupLogic() {
 		for _, handler := range Manager.groupMessageHandlers {
 			handler(client, event)
 		}
+	})
+
+	bot.QQClient.GroupNotifyEvent.Subscribe(func(client *client.QQClient, e event.INotifyEvent) {
+		utils.Logger.Info("notify.group[gid:%v,content:%v]", e.From(), e.Content())
+		switch e.(type) {
+		case *event.GroupPokeEvent:
+			pokeE := e.(*event.GroupPokeEvent)
+			if pokeE.Sender == client.Uin || pokeE.Sender == 2412125282 {
+				return
+			}
+			_ = client.GroupPoke(pokeE.GroupUin, pokeE.Sender)
+
+		}
+
 	})
 
 }
