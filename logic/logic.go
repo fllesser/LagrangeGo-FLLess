@@ -2,7 +2,6 @@ package logic
 
 import (
 	"github.com/ExquisiteCore/LagrangeGo-Template/bot"
-	"github.com/ExquisiteCore/LagrangeGo-Template/utils"
 	"github.com/LagrangeDev/LagrangeGo/client"
 	"github.com/LagrangeDev/LagrangeGo/client/event"
 	"github.com/LagrangeDev/LagrangeGo/message"
