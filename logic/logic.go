@@ -55,18 +55,6 @@ func SetupLogic() {
 		}
 	})
 
-	bot.QQClient.GroupNotifyEvent.Subscribe(func(client *client.QQClient, e event.INotifyEvent) {
-		utils.Logger.Info("notify.group[gid:%v,content:%v]", e.From(), e.Content())
-		switch e.(type) {
-		case *event.GroupPokeEvent:
-			pokeE := e.(*event.GroupPokeEvent)
-			if pokeE.Sender == client.Uin || pokeE.Receiver != client.Uin || pokeE.Sender == 2412125282 {
-				return
-			}
-			_ = client.GroupPoke(pokeE.GroupUin, pokeE.Sender)
 
-		}
-
-	})
 
 }
