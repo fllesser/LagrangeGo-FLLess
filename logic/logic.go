@@ -60,7 +60,7 @@ func SetupLogic() {
 		switch e.(type) {
 		case *event.GroupPokeEvent:
 			pokeE := e.(*event.GroupPokeEvent)
-			if pokeE.Sender == client.Uin || pokeE.Sender == 2412125282 || e.Receiver == client.Uin {
+			if pokeE.Sender == client.Uin || pokeE.Receiver != client.Uin || pokeE.Sender == 2412125282 {
 				return
 			}
 			_ = client.GroupPoke(pokeE.GroupUin, pokeE.Sender)
