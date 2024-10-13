@@ -5,6 +5,7 @@ import (
 	"github.com/LagrangeDev/LagrangeGo/client"
 	"github.com/LagrangeDev/LagrangeGo/client/entity"
 	"github.com/LagrangeDev/LagrangeGo/message"
+	"github.com/sirupsen/logrus"
 	"strings"
 )
 
@@ -29,6 +30,10 @@ func RegisterCustomLogic() {
 				title := strings.TrimSpace(strings.TrimPrefix(msg, "sgst"))
 				_ = client.GroupSetSpecialTitle(event.GroupUin, event.Sender.Uin, title)
 			}
+		} else if strings.HasPrefix(msg, "/test") {
+			logrus.Info("test")
+			node := &message.ForwardNode{Message: []message.IMessageElement{message.NewText("测试```java\nSystem.out.println()\n```"), message.NewText("测试")}}
+			_, _ = client.SendGroupMessage(event.GroupUin, []message.IMessageElement{message.NewNodeFoward([]*message.ForwardNode{node})})
 		}
 	})
 
